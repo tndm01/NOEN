@@ -1,0 +1,67 @@
+﻿<div class="box">
+    <div class="box-header">
+        <h3 class="box-title">Danh Sách Sản Phẩm</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <input type="text" class="form-control" ng-model="keyword" placeholder="Từ khóa...." />
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary" type="button" ng-click="search()">Tìm kiếm</button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <button class="btn btn-warning" ng-click="exportExcel()">Xuất Excel</button>
+                <!--<a class="btn btn-default" href="/Assets/admin/templates/ProductImportTemplate.xlsx">Download Template</a>-->
+                <button class="btn btn-primary" ui-sref="product_import">Nhập</button>
+                <button class="btn btn-success" ui-sref="products_add">Thêm mới</button>
+                <button class="btn btn-danger" ng-click="deleteMultiple()" id="btnDelete" disabled>Xóa</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table id="example2" class="table table-bordered table-hover">
+                    <tr>
+                        <th><input name="all" type="checkbox"/></th>
+                        <th style="width:10%">ID</th>
+                        <th style="width:25%">Tên sản phẩm</th>
+                        <th style="width:20%">Hình ảnh</th>
+                        <th style="width:20%">Ngày tạo</th>
+                        <th style="width:10%">Trạng thái</th>
+                        <th style="width:15%">Thao tác</th>
+                    </tr>
+                    <tr ng-repeat="item in products">
+                        <td><input type="checkbox" ng-model="item.checked" name="all"/></td>
+                        <td>{{item.ID}}</td>
+                        <td>{{item.Name}}</td>
+                        <td><img src="{{item.Image}}" style="width:100px"/></td>
+                        <td>{{item.CreatedDate | date: 'dd/MM/yyyy hh:mm:ss' }}</td>
+                        <td>
+                            <span ng-class="{'badge bg-red':item.Status==false,'badge bg-green':item.Status==true}">
+                                {{item.Status | statusFilter}}
+                            </span>
+                        </td>
+                        <td>
+                            <button class="btn btn-success" ng-click="exportPdf(item.ID)"><i class="fa fa-file-excel-o"></i></button>
+                            <button class="btn btn-primary" ui-sref="products_edit({id:item.ID})"><i class="fa fa-pencil"></i></button>
+                            <button class="btn btn-danger" ng-click="deleteProduct(item.ID)"><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                    <tfoot>
+                        <tr>
+                            <td colspan="7"><span class="pull-right">Trang: {{page + 1}} - Tổng số bản ghi: {{totalCount}}</span></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- /.box-body -->
+    <div class="box-footer">
+        <pager-directive page="{{page}}" custom-path="{{customPath}}" pages-count="{{pagesCount}}" total-count="{{totalCount}}" search-func="getProducts(page)"></pager-directive>
+    </div>
+</div>
+<!-- /.box -->
